@@ -2,8 +2,8 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map, tap, switchMap, catchError, Observable, throwError } from 'rxjs';
-import { ApiRoutes, PageRoutes } from '../../../shared/enum';
-import { CurrentUser, LoginInputInterface, TokensResponseInterface, RegisterInputInterface } from '../types';
+import { ApiRoutes, PageRoutes } from '@/shared/enum';
+import { CurrentUser, LoginInputInterface, TokensResponseInterface, RegisterInputInterface } from '@/features/auth';
 
 @Injectable({
   providedIn: 'root',

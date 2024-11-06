@@ -4,8 +4,8 @@ import { AuthService } from './auth.service';
 import { provideHttpClient, } from '@angular/common/http';
 import { provideHttpClientTesting, HttpTestingController } from '@angular/common/http/testing';
 import { Router } from '@angular/router';
-import { ApiRoutes, PageRoutes } from '../../../shared/enum';
-import { TokensResponseInterface, LoginInputInterface, RegisterInputInterface, CurrentUser } from '../types';
+import { ApiRoutes, PageRoutes } from '@/shared/enum';
+import { TokensResponseInterface, LoginInputInterface, RegisterInputInterface, CurrentUser } from '@/features/auth';
 
 describe('AuthService', () => {
   let service: AuthService;

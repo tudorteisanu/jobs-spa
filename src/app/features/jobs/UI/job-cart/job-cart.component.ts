@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { JobInterface } from '../../types';
+import { JobInterface } from '@/features/jobs';
 
 @Component({
   selector: 'app-job-cart',
