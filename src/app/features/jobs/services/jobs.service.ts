@@ -1,9 +1,10 @@
-import {EventEmitter, inject, Injectable} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {BehaviorSubject, delay, finalize, map, Observable} from "rxjs";
+import {BehaviorSubject, delay, finalize, map, Observable, tap} from "rxjs";
 import {JobInterface} from "@/features/jobs";
 import { ApiRoutes } from "@/shared/enum";
 import {PaginatedResponse} from "@/shared/types";
+import { mergeUniqueByProperty } from '@/utils';
 
 @Injectable({
   providedIn: 'root'
@@ -19,28 +20,19 @@ export class JobsService {
   public params$ = this.params.asObservable();
   public loading$ =this.loading.asObservable();
 
-  public fetchJobsEvent = new EventEmitter<void>();
-
-  constructor() {
-    this.fetchJobsEvent.subscribe({next: () => {
-      this.fetchJobs();
-    }});
-  }
-
-  fetchJobs(): void {
+  fetchJobs(): Observable<PaginatedResponse<JobInterface>> {
     const params = {...this.params.getValue()};
-
     this.loading.next(true);
-    this.httpClient.get<PaginatedResponse<JobInterface>>(ApiRoutes.Jobs, {params})
+    return this.httpClient.get<PaginatedResponse<JobInterface>>(ApiRoutes.Jobs, {params})
       .pipe(
         delay(3000),
-        map((jobs) => {
+        tap((jobs) => {
           const {data, meta} = jobs;
-          this.jobs.next(data);
+          this.addJobs(data);
           this.params.next({...this.params.getValue(), ...meta});
         }),
         finalize(() =>  this.loading.next(false)),
-      ).subscribe();
+      )
   }
 
   fetchJobById(id: string): Observable<JobInterface> {
@@ -48,11 +40,11 @@ export class JobsService {
 
     return this.httpClient.get<JobInterface>(jobUrl)
       .pipe(
-        map(job => {
+        tap(job => {
           const jobs = this.jobs.value;
 
           if (!jobs.some(job => job.id === id)) {
-            this.jobs.next([...jobs, job]);
+            this.addJobs([job]);
           }
 
           return job;
@@ -66,5 +58,9 @@ export class JobsService {
 
   setParams(params: Record<string, any>): void {
     this.params.next(params);
+  }
+
+  addJobs(newJobs: JobInterface[]): void {
+    this.jobs.next(mergeUniqueByProperty(this.jobs.getValue(), newJobs, 'id'));
   }
 }

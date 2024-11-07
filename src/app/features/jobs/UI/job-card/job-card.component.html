@@ -4,12 +4,12 @@
       {{job().title}}
     </a>
   </h3>
-  <p class="text-gray-500 text-sm mt-2">
+  <p class="description">
     {{job().description}}
   </p>
-  <p class="flex gap-2 mt-2">
+  <div class="chips-list">
     @for (keyword of job().keywords; track keyword) {
-      <span class="text-xs text-gray-500 border border-gray-300 p-1 rounded-md">{{keyword}}</span>
+      <span class="chip">{{keyword}}</span>
     }
-  </p>
+  </div>
 </div>

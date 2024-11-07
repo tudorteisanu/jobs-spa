@@ -54,7 +54,7 @@ describe('JobsService', () => {
       meta: { totalPages: 10, totalCount: 123, page: 1, size: 12 },
     };
 
-    service.fetchJobs();
+    service.fetchJobs().subscribe();
 
     const req = httpTestingController.expectOne(ApiRoutes.Jobs);
     expect(req.request.method).toBe('GET');
@@ -95,7 +95,7 @@ describe('JobsService', () => {
     const jobId = '1';
     const existingJob: JobInterface = { ...defaultMockJob, id: jobId, title: 'Existing Job', company: 'Old Co' };
 
-    service.fetchJobs();
+    service.fetchJobs().subscribe();
 
     const jobsRequest = httpTestingController.expectOne(ApiRoutes.Jobs);
     jobsRequest.flush({
